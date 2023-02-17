@@ -31,7 +31,7 @@ The requirements for this week are:
 - Screenshot of your Grafana monitoring dashboard metrics for `feature 0`
 
 *Here the screenshot. In the following days i would like to investigate better the use of this tool"
-![dashboard]()
+![dashboard](https://github.com/davins90/grafana_prometheus_python_docker/blob/main/grafana.png)
 
 # Boxkite + Prometheus + Grafana locally
 
