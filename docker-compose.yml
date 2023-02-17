@@ -1,0 +1,65 @@
+# version: "3"
+# services:
+#   graf:
+#     image: grafana/grafana:7.5.3
+#     ports:
+#       - 8030:8030
+#     tty: true
+#     volumes:
+#       - ./metrics/provisioning:/etc/grafana/provisioning
+#       - ./metrics/dashboards:/var/lib/grafana/dashboards
+#   prom:
+#     image: prom/prometheus:v2.26.0
+#     ports:
+#       - 9090:9090
+#     tty: true
+#     volumes:
+#       - ./metrics/prometheus.yml:/etc/prometheus/prometheus.yml
+#   app:
+#     build:
+#       context: app
+#     ports:
+#       - 5000:5000
+#     tty: true
+#     volumes:
+#       - ./model.pkl:/app/model.pkl
+#       - ./histogram.prom:/app/histogram.prom
+  # jupyter:
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - 8080:8080
+  #   tty: true
+  #   command: jupyter-lab --ip 0.0.0.0 --port=8080 --allow-root --no-browser --NotebookApp.token=''
+version: "3"
+services:
+  graf:
+    image: grafana/grafana:7.5.3
+    ports:
+      - 3000:3000
+    volumes:
+      - ./metrics/provisioning:/etc/grafana/provisioning
+      - ./metrics/dashboards:/var/lib/grafana/dashboards
+  prom:
+    image: prom/prometheus:v2.26.0
+    ports:
+      - 9090:9090
+    volumes:
+      - ./metrics/prometheus.yml:/etc/prometheus/prometheus.yml
+  app:
+    build:
+      context: app
+    ports:
+      - 5000:5000
+    volumes:
+      - ./model.pkl:/app/model.pkl
+      - ./histogram.prom:/app/histogram.prom
+  python:
+    image: python:3.9-slim
+    working_dir: /app
+    volumes:
+      - ./app:/app
+    ports:
+      - 8000:8000
+    command: bash -c "pip install -r requirements.txt && python manage.py runserver 0.0.0.0:8000"
